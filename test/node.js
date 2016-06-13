@@ -8,13 +8,15 @@ describe('Routes', () => {
   const homeEndpoints = require('../src/controllers/home')
 
   describe('GET /', () => {
-    it('show the welcome message', () => {
-      const req = {}
-      const res = {}
+    let req = {}
+    let res = {}
+
+    beforeEach(() => {
       res.send = sinon.spy()
-
       homeEndpoints.antaeusWelcomeMessage(req, res)
+    })
 
+    it('show the welcome message', () => {
       expect(res.send.calledWith('Welcome to Antaeus')).to.equal(true)
     })
   })
