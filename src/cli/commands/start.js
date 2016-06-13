@@ -8,10 +8,16 @@ module.exports = Command.extend({
   options: {
     port: {
       default: 3001
+    },
+    dnsConfig: {
+      type: 'string'
     }
   },
-  run: (port) => {
-    var server = new Antaeus({ port: port })
+  run: (port, dnsConfig) => {
+    var server = new Antaeus({
+      port: port,
+      dnsConfig: dnsConfig
+    })
 
     server.start(() => {
       // eslint-disable-next-line no-console
