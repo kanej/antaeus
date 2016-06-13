@@ -1,5 +1,6 @@
 'use strict'
 
+const _ = require('lodash/fp')
 const express = require('express')
 const ipfsAPI = require('ipfs-api')
 const homeEndpoints = require('./controllers/home')
@@ -7,6 +8,14 @@ const homeEndpoints = require('./controllers/home')
 var Antaeus = function (options) {
   this.app = null
   this.ipfs = null
+
+  this.defaultConfig = {
+    port: 3001
+  }
+
+  if (_.isPlainObject(options)) {
+    this.config = _.assign(this.defaultConfig, options)
+  }
 
   this.init = function init () {
     this.app = express()
@@ -21,7 +30,7 @@ var Antaeus = function (options) {
   }
 
   this.start = function start (callback) {
-    this.app.listen(3001, callback)
+    this.app.listen(this.config.port, callback)
 
     return this
   }

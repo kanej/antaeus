@@ -39,6 +39,7 @@
   "dependencies": {
     "express": "^4.13.4",
     "ipfs-api": "^5.0.1",
+    "lodash": "^4.13.1",
     "ronin": "^0.3.11"
   }
 }
