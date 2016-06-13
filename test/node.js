@@ -42,40 +42,64 @@ describe('Routes', () => {
     })
 
     describe('an individual file', () => {
-      it('returns the file when it is a valid address', () => {
-        ipfs.cat.callsArgWith(1, null, requestedFile)
+      describe('looked up by a valid address', () => {
+        beforeEach(() => {
+          ipfs.cat.callsArgWith(1, null, requestedFile)
+          homeEndpoints.routeToIPFS(req, res)
+        })
 
-        homeEndpoints.routeToIPFS(req, res)
-
-        expect(requestedFile.pipe.calledOnce).to.equal(true)
+        it('returns the file', () => {
+          expect(requestedFile.pipe.calledOnce).to.equal(true)
+        })
       })
 
-      it('returns the index.html page if the address is a directory with an index.html', () => {
-        ipfs.cat.onFirstCall().callsArgWith(1, { message: 'this dag node is a directory' }, null)
-        ipfs.cat.onSecondCall().callsArgWith(1, null, requestedIndexFile)
+      describe('looked up by an invalid address', () => {
+        beforeEach(() => {
+          ipfs.cat.callsArgWith(1, 'Not a valid address', null)
+          homeEndpoints.routeToIPFS(req, res)
+        })
 
-        homeEndpoints.routeToIPFS(req, res)
+        it('returns a 500 http status code', () => {
+          expect(res.status.calledWith(500)).to.equal(true)
+        })
 
-        expect(requestedIndexFile.pipe.calledOnce).to.equal(true)
+        it('returns the error message', () => {
+          expect(res.send.calledWith('Not a valid address')).to.equal(true)
+        })
       })
+    })
 
-      it('return a 500 if it is not a valid address', () => {
-        ipfs.cat.callsArgWith(1, 'Not a valid address', null)
+    describe('a directory', () => {
+      describe('looked up by a valid address', () => {
+        beforeEach(() => {
+          ipfs.cat.onFirstCall().callsArgWith(1, { message: 'this dag node is a directory' }, null)
+        })
 
-        homeEndpoints.routeToIPFS(req, res)
+        describe('with an index.html file', () => {
+          beforeEach(() => {
+            ipfs.cat.onSecondCall().callsArgWith(1, null, requestedIndexFile)
+            homeEndpoints.routeToIPFS(req, res)
+          })
 
-        expect(res.status.calledWith(500))
-        expect(res.send.calledOnce)
-      })
+          it('returns the index.html page', () => {
+            expect(requestedIndexFile.pipe.calledOnce).to.equal(true)
+          })
+        })
 
-      it('return a 500 if the address is a directory without an index.html', () => {
-        ipfs.cat.onFirstCall().callsArgWith(1, { message: 'this dag node is a directory' }, null)
-        ipfs.cat.onSecondCall().callsArgWith(1, 'Not a valid address', null)
+        describe('without an index.html file', () => {
+          beforeEach(() => {
+            ipfs.cat.onSecondCall().callsArgWith(1, 'Not a valid address', null)
+            homeEndpoints.routeToIPFS(req, res)
+          })
 
-        homeEndpoints.routeToIPFS(req, res)
+          it('returns a 500 status code', () => {
+            expect(res.status.calledWith(500)).to.equal(true)
+          })
 
-        expect(res.status.calledWith(500))
-        expect(res.send.calledOnce)
+          it('returns the error message', () => {
+            expect(res.send.calledWith('Not a valid address')).to.equal(true)
+          })
+        })
       })
     })
   })
