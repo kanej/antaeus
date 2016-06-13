@@ -28,6 +28,7 @@
     "sinon": "^1.17.4"
   },
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "ipfs-api": "^5.0.1"
   }
 }
