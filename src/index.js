@@ -1,18 +1,14 @@
 'use strict'
 
-const express = require('express')
-const ipfsAPI = require('ipfs-api')
-const homeEndpoints = require('./controllers/home')
+const Antaeus = require('./antaeus')
 
-const app = express()
-const ipfs = ipfsAPI('localhost', '5001', { protocol: 'http' })
+var config = {
+  port: 3001
+}
 
-app.set('ipfs', ipfs)
+var server = new Antaeus(config)
 
-app.get('/', homeEndpoints.antaeusWelcomeMessage)
-app.get(/^\/ipfs.*/, homeEndpoints.routeToIPFS)
-
-app.listen(3001, () => {
+server.start(() => {
   // eslint-disable-next-line no-console
   console.log('Antaeus Server running on port 3001.')
 })
