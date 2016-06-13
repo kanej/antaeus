@@ -10,7 +10,8 @@
     "build": "aegir-build",
     "test": "aegir-test node",
     "coverage": "aegir-coverage",
-    "coverage-publish": "aegir-coverage publish"
+    "coverage-publish": "aegir-coverage publish",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
