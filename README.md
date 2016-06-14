@@ -1,6 +1,7 @@
 Antaeus - IPFS Gateway with hostname rewriting
 ==============================================
 [![aegir](https://img.shields.io/badge/follows-aegir-blue.svg?style=flat-square)](https://github.com/dignifiedquire/aegir)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/feross/standard)
 [![Coverage Status](https://coveralls.io/repos/github/kanej/antaeus/badge.svg?branch=master)](https://coveralls.io/github/kanej/antaeus?branch=master)
 [![Dependency Status](https://david-dm.org/kanej/antaeus.svg?style=flat-square)](https://david-dm.org/kanej/antaeus)
 [![CircleCI](https://circleci.com/gh/kanej/antaeus.svg?style=svg)](https://circleci.com/gh/kanej/antaeus)
