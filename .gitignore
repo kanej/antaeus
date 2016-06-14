@@ -37,5 +37,6 @@ jspm_packages
 .node_repl_history
 
 dist/
+lib/
 .DS_Store
 localDnsConfig.json
