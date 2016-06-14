@@ -1,0 +1,10 @@
+#!/bin/sh
+tmux new-session -d -s antaeus -n emacs
+
+tmux send-keys -t antaeus:0 'emacs package.json' C-m
+
+tmux new-window -t antaeus:1 -n ipfs 'nodemon src/index.js localDnsConfig.json'
+tmux new-window -t antaeus:2 -n ipfs 'ipfs daemon'
+tmux select-window -t antaeus:0
+
+tmux -2 attach-session -t antaeus
