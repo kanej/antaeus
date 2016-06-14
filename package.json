@@ -42,5 +42,8 @@
     "ipfs-api": "^5.0.1",
     "lodash": "^4.13.1",
     "ronin": "^0.3.11"
-  }
+  },
+  "contributors": [
+    "John Kane <john@kanej.me>"
+  ]
 }
