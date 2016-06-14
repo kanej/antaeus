@@ -1,6 +1,6 @@
 Antaeus - IPFS Gateway with hostname rewriting
 ==============================================
-> The giant then reached out the hands in haste 
+> The giant then reached out the hands in haste
 > Whose mighty grip was felt by Hercules
 > And took my guide. Feeling himself embraced,
 > Virgil looked down and said: "Come closer, please:
@@ -12,7 +12,7 @@ so that you can serve a website from IPFS on a root domain name.
 
 Install
 -------
-Antaeus requires the ipfs client and daemon to be installed. It is packaged as an npm module:
+Antaeus requires the ipfs client and daemon to be installed and running. It is packaged as an npm module:
 
 ```bash
 $ npm install -g antaeus
