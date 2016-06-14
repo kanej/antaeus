@@ -1,5 +1,10 @@
-Antaeus - IPFS Gateway in node with hostname rewriting
-======================================================
+Antaeus - IPFS Gateway with hostname rewriting
+==============================================
+> The giant then reached out the hands in haste 
+> Whose mighty grip was felt by Hercules
+> And took my guide. Feeling himself embraced,
+> Virgil looked down and said: "Come closer, please:
+> It's your turn." Inferno, Canto 31
 
 Antaeus is a node webserver that wraps the IPFS daemon.
 It allows you to define a mapping from a hostname to an IPFS address,
@@ -11,13 +16,14 @@ Antaeus requires the ipfs client and daemon to be installed. It is packaged as a
 
 ```bash
 $ npm install -g antaeus
-'''
+```
 
 This will install a command line program `antaeus` that can be used to start the webserver:
 
 ```bash
 $ antaeus start --port 8080 --dnsConfig dnsMapping.json
 ```
+
 The dns mapping file is a json map from hostnames to ipfs addresses:
 
 ```json
@@ -30,7 +36,7 @@ Once started, you will need to modify your hosts file to test the mapping in the
 You can test with `curl` more directly by setting the appropriate hostname:
 
 ```bash
-$ curl -H 'Host: www.example.com' localhost:8080 ;; Hello World
+$ curl -H 'Host: www.example.com' localhost:8080 # Hello World
 ```
 
 Development
