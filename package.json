@@ -33,6 +33,7 @@
     "aegir": "^3.2.0",
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
+    "mocha-junit-reporter": "^1.11.1",
     "precommit": "^1.2.0",
     "sinon": "^1.17.4"
   },

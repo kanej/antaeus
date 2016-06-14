@@ -1,3 +1,20 @@
+dependencies:
+  pre:
+    - npm install -g istanbul
+  override:
+    - npm update
+
 machine:
   node:
-    version: 6.1.0
+    version: stable
+  environment:
+    MOCHA_DIR: $CIRCLE_TEST_REPORTS/junit
+    MOCHA_FILE: $MOCHA_DIR/reports.xml
+
+test:
+  override:
+    - mkdir -p $MOCHA_DIR
+    - mocha --reporter mocha-junit-reporter --bail --check-leaks test/**
+  post:
+    - istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec test/**
+    - cp -r ./coverage/lcov-report/ $CIRCLE_ARTIFACTS
