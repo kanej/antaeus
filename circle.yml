@@ -14,7 +14,7 @@ machine:
 test:
   override:
     - mkdir -p $MOCHA_DIR
-    - mocha --reporter mocha-junit-reporter --bail --check-leaks test/**
+    - ./node_modules/mocha/bin/_mocha --reporter mocha-junit-reporter --bail --check-leaks test/**
   post:
     - istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec test/**
     - cp -r ./coverage/lcov-report/ $CIRCLE_ARTIFACTS
