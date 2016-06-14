@@ -1,7 +1,7 @@
 Antaeus - IPFS Gateway with hostname rewriting
 ==============================================
-[![CircleCI](https://circleci.com/gh/kanej/antaeus.svg?style=svg)](https://circleci.com/gh/kanej/antaeus)
 [![aegir](https://img.shields.io/badge/follows-aegir-blue.svg?style=flat-square)](https://github.com/dignifiedquire/aegir)
+[![CircleCI](https://circleci.com/gh/kanej/antaeus.svg?style=svg)](https://circleci.com/gh/kanej/antaeus)
 > The giant then reached out the hands in haste
 > Whose mighty grip was felt by Hercules
 > And took my guide. Feeling himself embraced,

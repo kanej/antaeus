@@ -13,7 +13,7 @@
   },
   "scripts": {
     "lint": "aegir-lint",
-    "release": "aegir-release",
+    "release": "aegir-release --env node",
     "build": "aegir-build",
     "test": "aegir-test node",
     "coverage": "aegir-coverage",
