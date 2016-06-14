@@ -18,3 +18,4 @@ test:
   post:
     - istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec test/**
     - cp -r ./coverage/lcov-report/ $CIRCLE_ARTIFACTS
+    - npm run coverage-publish
