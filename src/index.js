@@ -4,7 +4,10 @@ const Antaeus = require('./antaeus')
 
 var config = {
   port: 3001,
-  dnsConfig: null
+  dnsConfig: null,
+  ipfsConfig: {
+    multiaddr: '/ip4/127.0.0.1/tcp/5001'
+  }
 }
 
 if (process.argv.length === 3) {
