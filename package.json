@@ -18,7 +18,8 @@
     "test": "aegir-test node",
     "coverage": "aegir-coverage",
     "coverage-publish": "aegir-coverage publish",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "commit": "git-cz"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "aegir": "^3.2.0",
     "chai": "^3.5.0",
+    "cz-conventional-changelog": "1.1.6",
     "mocha": "^2.5.3",
     "mocha-junit-reporter": "^1.11.1",
     "precommit": "^1.2.0",
@@ -45,5 +47,10 @@
   },
   "contributors": [
     "John Kane <john@kanej.me>"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
