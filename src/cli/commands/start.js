@@ -12,17 +12,22 @@ module.exports = Command.extend({
     dnsConfig: {
       type: 'string'
     },
-    ipfsConnection: {
+    ipfsHost: {
       type: 'string',
-      default: '/ip4/127.0.0.1/tcp/5001'
+      default: '127.0.0.1'
+    },
+    ipfsPort: {
+      type: 'string',
+      default: '5001'
     }
   },
-  run: (port, dnsConfig, ipfsConnection) => {
+  run: (port, dnsConfig, ipfsHost, ipfsPort) => {
     var server = new Antaeus({
       port: port,
       dnsConfig: dnsConfig,
       ipfsConfig: {
-        multiaddr: ipfsConnection
+        host: ipfsHost,
+        port: ipfsPort
       }
     })
 

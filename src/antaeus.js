@@ -17,7 +17,8 @@ var Antaeus = function (options) {
     port: 3001,
     dnsConfig: null,
     ipfsConfig: {
-      multiaddr: '/ip4/127.0.0.1/tcp/5001'
+      host: 'localhost',
+      port: 5001
     }
   }
 
@@ -29,7 +30,7 @@ var Antaeus = function (options) {
     this._initDNSConfig()
 
     this.app = express()
-    this.ipfs = ipfsAPI(this.config.ipfsConfig.multiaddr)
+    this.ipfs = ipfsAPI(this.config.ipfsConfig.host, this.config.ipfsConfig.port)
 
     this.app.set('ipfs', this.ipfs)
 

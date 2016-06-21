@@ -6,7 +6,8 @@ var config = {
   port: 3001,
   dnsConfig: null,
   ipfsConfig: {
-    multiaddr: '/ip4/127.0.0.1/tcp/5001'
+    host: 'localhost',
+    port: 5001
   }
 }
 
