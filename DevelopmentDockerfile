@@ -1,0 +1,11 @@
+FROM node:6.1.0
+
+RUN apt-get update -qq && apt-get install -y rsync
+
+RUN mkdir /antaeus
+WORKDIR /antaeus
+VOLUME /antaeus
+
+EXPOSE 3000
+
+CMD node src/cli/bin.js start --port 3000 --dnsConfig localDnsConfig.json --ipfsHost ipfs --ipfsPort 5001

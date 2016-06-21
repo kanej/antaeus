@@ -1,0 +1,16 @@
+version: '2'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: DevelopmentDockerfile
+    volumes:
+      - .:/antaeus
+    ports:
+      - "80:3000"
+    depends_on:
+      - ipfs
+    environment:
+      - NODE_ENV=production
+  ipfs:
+    image: jbenet/go-ipfs
