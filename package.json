@@ -14,6 +14,7 @@
   "scripts": {
     "lint": "aegir-lint",
     "release": "aegir-release --env node",
+    "post-release": "./script/publish_antaeus_docker",
     "build": "aegir-build",
     "test": "aegir-test node",
     "coverage": "aegir-coverage",

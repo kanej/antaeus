@@ -1,0 +1,6 @@
+
+
+ANTAEUS_VERSION=$(npm view antaeus version)
+
+docker build -t kanej/antaeus:$ANTAEUS_VERSION --build-arg VERSION=$ANTAEUS_VERSION .
+docker push kanej/antaeus:$ANTAEUS_VERSION
