@@ -41,6 +41,7 @@
     "sinon": "^1.17.4"
   },
   "dependencies": {
+    "bluebird": "3.4.1",
     "express": "^4.13.4",
     "ipfs-api": "^5.0.1",
     "lodash": "^4.13.1",
