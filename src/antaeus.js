@@ -6,11 +6,13 @@ const express = require('express')
 const ipfsAPI = require('ipfs-api')
 const homeEndpoints = require('./controllers/home')
 const hostnameToIPFSRewrite = require('./middleware/hostname-to-ipfs-rewrite-middleware')
+const ConfigLoader = require('./configLoader')
 
 var Antaeus = function (options) {
   this.app = null
   this.ipfs = null
 
+  this.dnsConfigLoader = null
   this.dnsConfig = {}
 
   this.defaultConfig = {
@@ -27,10 +29,12 @@ var Antaeus = function (options) {
   }
 
   this.init = function init () {
-    this._initDNSConfig()
-
     this.app = express()
     this.ipfs = ipfsAPI(this.config.ipfsConfig.host, this.config.ipfsConfig.port)
+
+    this.dnsConfigLoader = new ConfigLoader({ ipfs: this.ipfs })
+
+    this._initDNSConfig()
 
     this.app.set('ipfs', this.ipfs)
 
@@ -48,10 +52,19 @@ var Antaeus = function (options) {
     return this
   }
 
+  this.verify = function verify (configAddress, callback) {
+    return this.dnsConfigLoader.verify(configAddress, callback)
+  }
+
   // Helpers
 
   this._initDNSConfig = function _initDNSConfig () {
     if (this.config.dnsConfig) {
+      if (this.config.dnsConfig.length === 46) {
+        this.dnsConfig = {}
+        return
+      }
+
       try {
         const stats = fs.lstatSync(this.config.dnsConfig)
 
