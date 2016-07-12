@@ -32,7 +32,7 @@ const MockIpfs = function (options) {
 
   this.cat = function cat (configAddress, cb) {
     if (this.options.error) {
-      return cb(this.options.errorMessage, null)
+      return cb(new Error(this.options.errorMessage), null)
     } else if (this.options.readError) {
       let s = new Source()
       return cb(null, s)

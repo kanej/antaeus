@@ -4,7 +4,7 @@ const Command = require('ronin').Command
 const Antaeus = require('../../../src/antaeus')
 
 module.exports = Command.extend({
-  desc: 'Start the Antaeus server',
+  desc: 'Verify an Antaeus DNS config file',
   options: {
     dnsConfig: {
       type: 'string'
@@ -28,9 +28,10 @@ module.exports = Command.extend({
       }
     })
 
-    server.verify(dnsConfig, () => {
-      // eslint-disable-next-line no-console
-      console.log('Antaeus Verify')
-    })
+    server.verify(dnsConfig)
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log('Error: ' + err)
+      })
   }
 })

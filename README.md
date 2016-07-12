@@ -44,6 +44,14 @@ You can test with `curl` more directly by setting the appropriate hostname:
 $ curl -H 'Host: www.example.com' localhost:8080 # Hello World
 ```
 
+The dns mapping file can be loaded from ipfs itself. The `dnsConfig` option accepts an ipfs address:
+
+```bash
+$ ipfs add dnsMapping.json
+added QmeUrP9wiBxBv9GA7D22F8n5gNok4uMmBeZWkarmAwBJHD dnsMapping.json
+$ antaeus start --port 8080 --dnsConfig QmeUrP9wiBxBv9GA7D22F8n5gNok4uMmBeZWkarmAwBJHD
+```
+
 Development
 -----------
 The main entry point is `src/index.js`, so to start the server for development run:

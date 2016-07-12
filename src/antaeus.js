@@ -1,9 +1,10 @@
 'use strict'
 
-const fs = require('fs')
 const _ = require('lodash/fp')
+const fs = require('fs')
 const express = require('express')
 const ipfsAPI = require('ipfs-api')
+const Promise = require('bluebird')
 const homeEndpoints = require('./controllers/home')
 const hostnameToIPFSRewrite = require('./middleware/hostname-to-ipfs-rewrite-middleware')
 const ConfigLoader = require('./configLoader')
@@ -28,66 +29,45 @@ var Antaeus = function (options) {
     this.config = _.assign(this.defaultConfig, options)
   }
 
-  this.init = function init () {
-    this.app = express()
-    this.ipfs = ipfsAPI(this.config.ipfsConfig.host, this.config.ipfsConfig.port)
-
-    this.dnsConfigLoader = new ConfigLoader({ ipfs: this.ipfs })
-
-    this._initDNSConfig()
-
-    this.app.set('ipfs', this.ipfs)
-
-    this.app.use(hostnameToIPFSRewrite.rewrite(this.dnsConfig))
-
-    this.app.get('/', homeEndpoints.antaeusWelcomeMessage)
-    this.app.get(/^\/ipfs.*/, homeEndpoints.routeToIPFS)
-
-    return this
-  }
+  this.initPromise = null
 
   this.start = function start (callback) {
-    this.app.listen(this.config.port, callback)
+    this._init().then(() => {
+      this.app.listen(this.config.port, callback)
+    })
 
     return this
   }
 
-  this.verify = function verify (configAddress, callback) {
-    return this.dnsConfigLoader.verify(configAddress, callback)
+  this.verify = function verify (configAddress) {
+    return this._init().then(() => { this.dnsConfigLoader.retrieve(configAddress) })
   }
 
   // Helpers
+  this._init = function init () {
+    return new Promise((resolve, reject) => {
+      this.app = express()
+      this.ipfs = ipfsAPI(this.config.ipfsConfig.host, this.config.ipfsConfig.port)
 
-  this._initDNSConfig = function _initDNSConfig () {
-    if (this.config.dnsConfig) {
-      if (this.config.dnsConfig.length === 46) {
-        this.dnsConfig = {}
-        return
-      }
+      this.dnsConfigLoader = new ConfigLoader({ ipfs: this.ipfs, fs: fs })
 
-      try {
-        const stats = fs.lstatSync(this.config.dnsConfig)
+      this.dnsConfigLoader.retrieve(this.config.dnsConfig)
+        .then((dnsConfig) => {
+          this.dnsConfig = dnsConfig
+          this.app.set('ipfs', this.ipfs)
 
-        if (!stats.isFile()) {
-          throw new Error('The given DNS config json file is not a file')
-        }
-      } catch (e) {
-        throw new Error('Could not find the given DNS config json file')
-      }
+          this.app.use(hostnameToIPFSRewrite.rewrite(this.dnsConfig))
 
-      const dnsConfigRaw = fs.readFileSync(this.config.dnsConfig)
-
-      try {
-        this.dnsConfig = JSON.parse(dnsConfigRaw)
-      } catch (e) {
-        throw new Error('Unable to parse the given DNS config json file')
-      }
-    } else {
-      this.dnsConfig = {}
-    }
+          this.app.get('/', homeEndpoints.antaeusWelcomeMessage)
+          this.app.get(/^\/ipfs.*/, homeEndpoints.routeToIPFS)
+          resolve()
+        })
+        .catch((e) => {
+          // eslint-disable-next-line no-console
+          console.error(e)
+        })
+    })
   }
-
-  return this.init()
 }
 
 module.exports = Antaeus
