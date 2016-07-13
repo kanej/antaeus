@@ -4,10 +4,10 @@ const _ = require('lodash/fp')
 const fs = require('fs')
 const express = require('express')
 const ipfsAPI = require('ipfs-api')
-const Promise = require('bluebird')
 const homeEndpoints = require('./controllers/home')
 const hostnameToIPFSRewrite = require('./middleware/hostname-to-ipfs-rewrite-middleware')
 const ConfigLoader = require('./configLoader')
+const DaemonChecker = require('./daemonChecker')
 
 var Antaeus = function (options) {
   this.app = null
@@ -45,28 +45,29 @@ var Antaeus = function (options) {
 
   // Helpers
   this._init = function init () {
-    return new Promise((resolve, reject) => {
-      this.app = express()
-      this.ipfs = ipfsAPI(this.config.ipfsConfig.host, this.config.ipfsConfig.port)
+    const ipfsHost = this.config.ipfsConfig.host
+    const ipfsPort = this.config.ipfsConfig.port
 
-      this.dnsConfigLoader = new ConfigLoader({ ipfs: this.ipfs, fs: fs })
+    this.daemonChecker = new DaemonChecker({ retries: 20 })
 
-      this.dnsConfigLoader.retrieve(this.config.dnsConfig)
-        .then((dnsConfig) => {
-          this.dnsConfig = dnsConfig
-          this.app.set('ipfs', this.ipfs)
+    return this.daemonChecker.ensureConnection(ipfsHost, ipfsPort)
+      .then(() => {
+        this.ipfs = ipfsAPI(ipfsHost, ipfsPort)
 
-          this.app.use(hostnameToIPFSRewrite.rewrite(this.dnsConfig))
+        this.dnsConfigLoader = new ConfigLoader({ ipfs: this.ipfs, fs: fs })
+        return this.dnsConfigLoader.retrieve(this.config.dnsConfig)
+      })
+      .then((dnsConfig) => {
+        this.dnsConfig = dnsConfig
 
-          this.app.get('/', homeEndpoints.antaeusWelcomeMessage)
-          this.app.get(/^\/ipfs.*/, homeEndpoints.routeToIPFS)
-          resolve()
-        })
-        .catch((e) => {
-          // eslint-disable-next-line no-console
-          console.error(e)
-        })
-    })
+        this.app = express()
+        this.app.set('ipfs', this.ipfs)
+
+        this.app.use(hostnameToIPFSRewrite.rewrite(this.dnsConfig))
+
+        this.app.get('/', homeEndpoints.antaeusWelcomeMessage)
+        this.app.get(/^\/ipfs.*/, homeEndpoints.routeToIPFS)
+      })
   }
 }
 

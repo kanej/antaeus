@@ -31,7 +31,7 @@ module.exports = Command.extend({
     server.verify(dnsConfig)
       .catch((err) => {
         // eslint-disable-next-line no-console
-        console.log('Error: ' + err)
+        console.log(err.message)
       })
   }
 })
