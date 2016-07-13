@@ -5,6 +5,7 @@ const antaeusWelcomeMessage = (req, res) => {
 }
 
 const routeToIPFS = (req, res) => {
+  const logger = req.app.get('logger')
   const ipfs = req.app.get('ipfs')
 
   const ipfsPath = req.url.replace('/ipfs/', '')
@@ -14,16 +15,14 @@ const routeToIPFS = (req, res) => {
       if (err.message === 'this dag node is a directory') {
         return ipfs.cat(ipfsPath + '/index.html', (err, recursiveFile) => {
           if (err) {
-            // eslint-disable-next-line no-console
-            console.log('Error: ' + err)
+            logger.error(err)
             return res.status(500).send(err)
           }
 
           return recursiveFile.pipe(res)
         })
       } else {
-        // eslint-disable-next-line no-console
-        console.log('Error: ', err.message, ipfsPath)
+        logger.error(err.message, { path: ipfsPath })
         return res.status(500).send(err)
       }
     }

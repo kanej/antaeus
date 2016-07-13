@@ -45,7 +45,9 @@
     "express": "^4.13.4",
     "ipfs-api": "^5.0.1",
     "lodash": "^4.13.1",
-    "ronin": "^0.3.11"
+    "morgan": "1.7.0",
+    "ronin": "^0.3.11",
+    "winston": "2.2.0"
   },
   "contributors": [
     "John Kane <john@kanej.me>"

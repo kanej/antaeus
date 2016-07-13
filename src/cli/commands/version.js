@@ -1,13 +1,15 @@
 'use strict'
 
 const Command = require('ronin').Command
+const Logger = require('../../../src/logger')
 const fs = require('fs')
 
 module.exports = Command.extend({
   desc: 'Shows the Antaeus servers version information',
   run: () => {
-    var packageJson = JSON.parse(fs.readFileSync('./package.json'))
-    // eslint-disable-next-line no-console
-    console.log(`antaeus version ${packageJson.version}`)
+    const logger = new Logger()
+
+    const packageJson = JSON.parse(fs.readFileSync('./package.json'))
+    logger.info(`antaeus version ${packageJson.version}`)
   }
 })

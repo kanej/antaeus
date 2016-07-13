@@ -2,6 +2,7 @@
 
 const Command = require('ronin').Command
 const Antaeus = require('../../../src/antaeus')
+const Logger = require('../../../src/logger')
 
 module.exports = Command.extend({
   desc: 'Start the Antaeus server',
@@ -22,18 +23,20 @@ module.exports = Command.extend({
     }
   },
   run: (port, dnsConfig, ipfsHost, ipfsPort) => {
-    var server = new Antaeus({
+    const logger = new Logger()
+
+    const server = new Antaeus({
       port: port,
       dnsConfig: dnsConfig,
       ipfsConfig: {
         host: ipfsHost,
         port: ipfsPort
-      }
+      },
+      logger: logger
     })
 
     server.start(() => {
-      // eslint-disable-next-line no-console
-      console.log(`Antaeus Server started on port ${port}`)
+      logger.info(`Antaeus Server started on port ${port}`)
     })
   }
 })
