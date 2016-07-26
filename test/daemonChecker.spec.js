@@ -22,7 +22,8 @@ describe('Daemon Checker', () => {
   const runEnsureConnection = (done) => {
     checker = new DaemonChecker({
       retries: 5,
-      delay: 0
+      delay: 0,
+      logger: { info: () => {} }
     })
     checker.ensureConnection('localhost', 5001)
       .then(() => {
@@ -79,6 +80,10 @@ describe('Daemon Checker', () => {
 
     it('defaults to a second for the delay', () => {
       expect(checker.delay).to.equal(1000)
+    })
+
+    it('defaults to a noop object for the logger', () => {
+      expect(checker.logger.info).to.not.be.null
     })
   })
 

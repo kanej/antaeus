@@ -57,7 +57,7 @@ var Antaeus = function (options) {
     const ipfsHost = this.config.ipfsConfig.host
     const ipfsPort = this.config.ipfsConfig.port
 
-    this.daemonChecker = new DaemonChecker({ retries: 20 })
+    this.daemonChecker = new DaemonChecker({ retries: 20, logger: this.logger })
 
     return this.daemonChecker.ensureConnection(ipfsHost, ipfsPort)
       .then(() => {

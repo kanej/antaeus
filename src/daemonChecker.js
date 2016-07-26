@@ -11,6 +11,7 @@ var DaemonChecker = function (options) {
 
   this.retries = _.isNumber(options.retries) ? options.retries : 10
   this.delay = _.isNumber(options.delay) ? options.delay : 1000
+  this.logger = _.isObject(options.logger) ? options.logger : { info: () => {} }
 
   this.ensureConnection = function (host, port) {
     return new Promise((resolve, reject) => {
@@ -34,8 +35,7 @@ var DaemonChecker = function (options) {
       .catch((err) => {
         if (err.code === 'ENOTFOUND' || err.code === 'ECONNREFUSED') {
           return Promise.delay(this.delay).then(() => {
-            // eslint-disable-next-line no-console
-            console.log('Could not connect to IPFS daemon. Retrying ...')
+            this.logger.info('Could not connect to IPFS daemon. Retrying ...')
             return this._recursiveRequest(resolve, reject, retries - 1, options)
           })
         }
