@@ -1,14 +1,18 @@
 'use strict'
 
 const Antaeus = require('./antaeus')
+const Logger = require('./logger')
 
-var config = {
+const logger = new Logger()
+
+const config = {
   port: 3001,
   dnsConfig: null,
   ipfsConfig: {
     host: 'localhost',
     port: 5001
-  }
+  },
+  logger: logger
 }
 
 if (process.argv.length === 3) {
@@ -18,6 +22,5 @@ if (process.argv.length === 3) {
 var server = new Antaeus(config)
 
 server.start(() => {
-  // eslint-disable-next-line no-console
-  console.log('Antaeus Server running on port 3001.')
+  logger.info(`Antaeus Server running on port ${config.port}.`)
 })

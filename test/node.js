@@ -23,9 +23,12 @@ describe('Routes', () => {
 
   describe('GET /ipfs/...', () => {
     let ipfs = {}
+    let logger = {
+      error: function noop () {}
+    }
     let req = {
       url: '/ipfs/QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u',
-      app: { get: () => { return ipfs } }
+      app: { get: (name) => { return name === 'logger' ? logger : ipfs } }
     }
     let res = {}
 
