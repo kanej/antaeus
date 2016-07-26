@@ -36,7 +36,7 @@ describe('Routes', () => {
     let requestedIndexFile = {}
 
     beforeEach(() => {
-      ipfs.cat = sinon.stub()
+      ipfs.send = sinon.stub()
 
       requestedFile.pipe = sinon.spy()
       requestedIndexFile.pipe = sinon.spy()
@@ -49,7 +49,7 @@ describe('Routes', () => {
     describe('an individual file', () => {
       describe('looked up by a valid address', () => {
         beforeEach(() => {
-          ipfs.cat.callsArgWith(1, null, requestedFile)
+          ipfs.send.callsArgWith(4, null, requestedFile)
           homeEndpoints.routeToIPFS(req, res)
         })
 
@@ -60,7 +60,7 @@ describe('Routes', () => {
 
       describe('looked up by an invalid address', () => {
         beforeEach(() => {
-          ipfs.cat.callsArgWith(1, 'Not a valid address', null)
+          ipfs.send.callsArgWith(4, 'Not a valid address', null)
           homeEndpoints.routeToIPFS(req, res)
         })
 
@@ -77,12 +77,12 @@ describe('Routes', () => {
     describe('a directory', () => {
       describe('looked up by a valid address', () => {
         beforeEach(() => {
-          ipfs.cat.onFirstCall().callsArgWith(1, { message: 'this dag node is a directory' }, null)
+          ipfs.send.onFirstCall().callsArgWith(4, { message: 'this dag node is a directory' }, null)
         })
 
         describe('with an index.html file', () => {
           beforeEach(() => {
-            ipfs.cat.onSecondCall().callsArgWith(1, null, requestedIndexFile)
+            ipfs.send.onSecondCall().callsArgWith(4, null, requestedIndexFile)
             homeEndpoints.routeToIPFS(req, res)
           })
 
@@ -93,7 +93,7 @@ describe('Routes', () => {
 
         describe('without an index.html file', () => {
           beforeEach(() => {
-            ipfs.cat.onSecondCall().callsArgWith(1, 'Not a valid address', null)
+            ipfs.send.onSecondCall().callsArgWith(4, 'Not a valid address', null)
             homeEndpoints.routeToIPFS(req, res)
           })
 
