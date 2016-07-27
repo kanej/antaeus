@@ -5,10 +5,13 @@ const fs = require('fs')
 const express = require('express')
 const ipfsAPI = require('ipfs-api')
 const morgan = require('morgan')
+const Etcd = require('node-etcd')
 
 const homeEndpoints = require('./controllers/home')
 const hostnameToIPFSRewrite = require('./middleware/hostname-to-ipfs-rewrite-middleware')
 const ConfigLoader = require('./configLoader')
+const MemoryDnsMapping = require('./dns/memoryDnsMapping')
+const EtcdDnsMapping = require('./dns/etcdDnsMapping')
 const DaemonChecker = require('./daemonChecker')
 const Logger = require('./logger')
 
@@ -20,7 +23,7 @@ var Antaeus = function (options) {
   this.logger = opts.logger ? opts.logger : null
 
   this.dnsConfigLoader = null
-  this.dnsConfig = {}
+  this.dnsMapping = null
 
   this.defaultConfig = {
     port: 3001,
@@ -28,7 +31,8 @@ var Antaeus = function (options) {
     ipfsConfig: {
       host: 'localhost',
       port: 5001
-    }
+    },
+    enableEtcd: false
   }
 
   if (_.isPlainObject(options)) {
@@ -67,7 +71,18 @@ var Antaeus = function (options) {
         return this.dnsConfigLoader.retrieve(this.config.dnsConfig)
       })
       .then((dnsConfig) => {
-        this.dnsConfig = dnsConfig
+        if (this.config.enableEtcd) {
+          return new EtcdDnsMapping({
+            etcd: new Etcd(),
+            dnsConfig: dnsConfig,
+            logger: this.logger
+          })
+        } else {
+          return new MemoryDnsMapping({ dnsConfig: dnsConfig })
+        }
+      })
+      .then((dnsMapping) => {
+        this.dnsMapping = dnsMapping
 
         this.app = express()
         this.app.set('ipfs', this.ipfs)
@@ -82,7 +97,7 @@ var Antaeus = function (options) {
         })
 
         this.app.use(middlewareLogging)
-        this.app.use(hostnameToIPFSRewrite.rewrite(this.dnsConfig))
+        this.app.use(hostnameToIPFSRewrite.rewrite(this.dnsMapping))
 
         this.app.get('/', homeEndpoints.antaeusWelcomeMessage)
         this.app.get(/^\/ipfs.*/, homeEndpoints.routeToIPFS)

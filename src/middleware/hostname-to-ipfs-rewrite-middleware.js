@@ -1,10 +1,12 @@
 'use strict'
 
-const rewrite = function rewrite (config) {
+const rewrite = function rewrite (dnsMapping) {
   return function ipfsRewriteMiddleware (req, res, next) {
-    if (config.hasOwnProperty(req.hostname)) {
+    const address = dnsMapping.lookup(req.hostname)
+
+    if (address) {
       const previousUrl = req.url.substring(1)
-      const ipfsRoot = config[req.hostname]
+      const ipfsRoot = address
 
       if (previousUrl === '') {
         req.url = ipfsRoot

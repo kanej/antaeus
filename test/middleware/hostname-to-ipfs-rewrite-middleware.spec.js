@@ -8,15 +8,21 @@ const expect = require('chai').expect
 const hostnameToIPFSRewrite = require('../../src/middleware/hostname-to-ipfs-rewrite-middleware')
 
 describe('Hostname Rewrite Middleware', () => {
-  let dnsConfig = null
+  let dnsMapping = null
   let middleware = null
 
   before(() => {
-    dnsConfig = JSON.parse(fs.readFileSync('./test/exampleDNSConfig.json'))
+    const dnsConfig = JSON.parse(fs.readFileSync('./test/exampleDNSConfig.json'))
+
+    dnsMapping = {
+      lookup: (key) => {
+        return dnsConfig[key]
+      }
+    }
   })
 
   beforeEach(() => {
-    middleware = hostnameToIPFSRewrite.rewrite(dnsConfig)
+    middleware = hostnameToIPFSRewrite.rewrite(dnsMapping)
   })
 
   describe('mapping from hostname to ipfs entry', () => {

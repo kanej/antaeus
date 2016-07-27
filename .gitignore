@@ -40,3 +40,4 @@ dist/
 lib/
 .DS_Store
 localDnsConfig.json
+default.etcd/

@@ -47,6 +47,7 @@
     "ipfs-api": "6.0.3",
     "lodash": "^4.13.1",
     "morgan": "1.7.0",
+    "node-etcd": "5.0.3",
     "ronin": "^0.3.11",
     "winston": "2.2.0"
   },
