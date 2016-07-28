@@ -37,16 +37,37 @@ describe('Memory DNS Mapping', () => {
     })
   })
 
-  describe('lookup', () => {
+  describe('api', () => {
     beforeEach(() => {
       mapping = new MemoryDnsMapping({ dnsConfig: initialConfig })
     })
 
-    it('by url', () => {
-      expect(mapping.lookup('www.example.com')).to.equal('/ipfs/QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u')
+    describe('lookup', () => {
+      it('by url', () => {
+        expect(mapping.lookup('www.example.com')).to.equal('/ipfs/QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u')
+      })
+    })
+
+    describe('adding an address', () => {
+      beforeEach((done) => {
+        mapping.add('www.example2.com', '/ipfs/QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs82')
+          .finally(done)
+      })
+
+      it('inserts it into the listing', () => {
+        expect(mapping.listing['www.example2.com']).to.equal('/ipfs/QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs82')
+      })
+    })
+
+    describe('deleting an address', () => {
+      beforeEach((done) => {
+        mapping.delete('www.example.com')
+          .finally(done)
+      })
+
+      it('inserts it into the listing', () => {
+        expect(mapping.listing['www.example.com']).to.be.undefined
+      })
     })
   })
-
-  it('allows adding a new mapping')
-  it('allows deleting an address mapping')
 })
