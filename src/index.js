@@ -12,7 +12,8 @@ const config = {
     host: 'localhost',
     port: 5001
   },
-  logger: logger
+  logger: logger,
+  enableEtcd: true
 }
 
 if (process.argv.length === 3) {

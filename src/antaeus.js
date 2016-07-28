@@ -3,16 +3,19 @@
 const _ = require('lodash/fp')
 const fs = require('fs')
 const express = require('express')
+const bodyParser = require('body-parser')
 const ipfsAPI = require('ipfs-api')
 const morgan = require('morgan')
 const Etcd = require('node-etcd')
 
 const homeEndpoints = require('./controllers/home')
+const apiEndpoints = require('./controllers/api')
 const hostnameToIPFSRewrite = require('./middleware/hostname-to-ipfs-rewrite-middleware')
 const ConfigLoader = require('./configLoader')
 const MemoryDnsMapping = require('./dns/memoryDnsMapping')
 const EtcdDnsMapping = require('./dns/etcdDnsMapping')
 const DaemonChecker = require('./daemonChecker')
+const Serializer = require('./api/serializer')
 const Logger = require('./logger')
 
 var Antaeus = function (options) {
@@ -57,6 +60,7 @@ var Antaeus = function (options) {
   // Helpers
   this._init = function init () {
     this.logger = this.logger ? this.logger : new Logger()
+    this.serializer = new Serializer()
 
     const ipfsHost = this.config.ipfsConfig.host
     const ipfsPort = this.config.ipfsConfig.port
@@ -85,8 +89,14 @@ var Antaeus = function (options) {
         this.dnsMapping = dnsMapping
 
         this.app = express()
+
         this.app.set('ipfs', this.ipfs)
+        this.app.set('serializer', this.serializer)
         this.app.set('logger', this.logger)
+        this.app.set('dnsMapping', this.dnsMapping)
+
+        this.app.use(bodyParser.urlencoded({ extended: false }))
+        this.app.use(bodyParser.json())
 
         const middlewareLogging = morgan('combined', {
           stream: {
@@ -100,6 +110,9 @@ var Antaeus = function (options) {
         this.app.use(hostnameToIPFSRewrite.rewrite(this.dnsMapping))
 
         this.app.get('/', homeEndpoints.antaeusWelcomeMessage)
+
+        apiEndpoints.setup(this.app)
+
         this.app.get(/^\/ipfs.*/, homeEndpoints.routeToIPFS)
       })
   }

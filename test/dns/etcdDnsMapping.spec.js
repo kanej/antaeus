@@ -74,8 +74,9 @@ describe('Etcd DNS Mapping', () => {
     })
 
     describe('adding an address', () => {
-      beforeEach(() => {
+      beforeEach((done) => {
         mapping.add('www.example2.com', '/ipfs/QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs82')
+          .finally(done)
       })
 
       it('makes it available in the listing', () => {
@@ -83,9 +84,24 @@ describe('Etcd DNS Mapping', () => {
       })
     })
 
+    describe('adding an address with an etcd error', () => {
+      let error = ''
+
+      beforeEach((done) => {
+        mapping.etcd.setError = new Error('ETCD went bad')
+        mapping.add('www.example2.com', '/ipfs/QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs82')
+          .catch((err) => { error = err.message })
+          .finally(done)
+      })
+
+      it('errors', () => {
+        expect(error).to.not.be.empty
+      })
+    })
+
     describe('deleting an address', () => {
-      beforeEach(() => {
-        mapping.delete('www.example.com')
+      beforeEach((done) => {
+        mapping.delete('www.example.com').finally(done)
       })
 
       it('removes it from the listing', () => {

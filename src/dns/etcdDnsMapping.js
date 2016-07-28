@@ -1,6 +1,7 @@
 'use strict'
 
 const _ = require('lodash/fp')
+const Promise = require('bluebird')
 
 class EtcdDnsMapping {
   constructor (options) {
@@ -23,7 +24,7 @@ class EtcdDnsMapping {
 
     if (_.isPlainObject(options.dnsConfig)) {
       _.toPairs(options.dnsConfig).forEach((entry) => {
-        this.etcd.set(this.antaeusEtcdRoot + entry[0], entry[1])
+        this.etcd.set(this.antaeusEtcdRoot + entry[0], entry[1], () => {})
       })
     }
   }
@@ -33,11 +34,19 @@ class EtcdDnsMapping {
   }
 
   add (address, ipfsRefPath) {
-    return this.etcd.set(EtcdDnsMapping._addressToKey(this.antaeusEtcdRoot, address), ipfsRefPath)
+    return new Promise((resolve, reject) => {
+      const key = EtcdDnsMapping._addressToKey(this.antaeusEtcdRoot, address)
+
+      return this.etcd.set(key, ipfsRefPath, EtcdDnsMapping._invertPromise(resolve, reject))
+    })
   }
 
   delete (address) {
-    return this.etcd.del(EtcdDnsMapping._addressToKey(this.antaeusEtcdRoot, address))
+    return new Promise((resolve, reject) => {
+      const key = EtcdDnsMapping._addressToKey(this.antaeusEtcdRoot, address)
+
+      return this.etcd.del(key, EtcdDnsMapping._invertPromise(resolve, reject))
+    })
   }
 
   static _keyToAddress (antaeusEtcdRoot, key) {
@@ -62,6 +71,16 @@ class EtcdDnsMapping {
     }
 
     return this.logger.info('Unknown etcd action')
+  }
+
+  static _invertPromise (resolve, reject) {
+    return (err, res) => {
+      if (err) {
+        return reject(err)
+      }
+
+      resolve(res)
+    }
   }
 }
 

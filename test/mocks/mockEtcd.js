@@ -1,6 +1,10 @@
 'use strict'
 
 class MockEtcd {
+  constructor () {
+    this.setError = null
+  }
+
   watcher () {
     return this
   }
@@ -9,12 +13,14 @@ class MockEtcd {
     this.callback = callback
   }
 
-  set (key, value) {
+  set (key, value, callback) {
     this._addKey(key, value)
+    callback(this.setError)
   }
 
-  del (key) {
+  del (key, callback) {
     this._deleteKey(key)
+    callback()
   }
 
   unknownAction () {
