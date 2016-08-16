@@ -1,4 +1,5 @@
-
+docker-machine start default
+eval $(docker-machine env default)
 
 ANTAEUS_VERSION=$(npm view antaeus version)
 
