@@ -82,7 +82,7 @@ class ApiClient {
   // Helpers
 
   resolveUrl (path) {
-    return 'http://localhost:3001' + path
+    return this.serverUrl + path
   }
 
   request (options) {
