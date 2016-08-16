@@ -13,7 +13,8 @@ const config = {
     port: 5001
   },
   logger: logger,
-  enableEtcd: true
+  enableEtcd: true,
+  etcdUrl: 'http://localhost:2379'
 }
 
 if (process.argv.length === 3) {

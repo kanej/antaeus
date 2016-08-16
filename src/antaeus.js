@@ -35,7 +35,8 @@ var Antaeus = function (options) {
       host: 'localhost',
       port: 5001
     },
-    enableEtcd: false
+    enableEtcd: false,
+    etcdUrl: 'http://localhost:2379'
   }
 
   if (_.isPlainObject(options)) {
@@ -76,8 +77,9 @@ var Antaeus = function (options) {
       })
       .then((dnsConfig) => {
         if (this.config.enableEtcd) {
+          this.logger.info('Connecting to Etcd at ' + this.config.etcdUrl)
           return new EtcdDnsMapping({
-            etcd: new Etcd(),
+            etcd: new Etcd(this.config.etcdUrl),
             dnsConfig: dnsConfig,
             logger: this.logger
           })

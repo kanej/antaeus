@@ -24,9 +24,13 @@ module.exports = Command.extend({
     enableEtcd: {
       type: 'boolean',
       default: false
+    },
+    etcdUrl: {
+      type: 'string',
+      default: 'http://localhost:2379'
     }
   },
-  run: (port, dnsConfig, ipfsHost, ipfsPort, enableEtcd) => {
+  run: (port, dnsConfig, ipfsHost, ipfsPort, enableEtcd, etcdUrl) => {
     const logger = new Logger()
 
     const server = new Antaeus({
@@ -37,6 +41,7 @@ module.exports = Command.extend({
         port: ipfsPort
       },
       enableEtcd: enableEtcd,
+      etcdUrl: etcdUrl,
       logger: logger
     })
 
