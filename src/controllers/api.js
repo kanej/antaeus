@@ -53,6 +53,7 @@ const apiSetup = function (app) {
   })
 
   app.put('/api/dns/:url', (req, res) => {
+    const logger = req.app.get('logger')
     const dnsMapping = req.app.get('dnsMapping')
     const serializer = req.app.get('serializer')
 
@@ -80,6 +81,7 @@ const apiSetup = function (app) {
         return res.status(201).json(serializer.serialize('dnsentries', dnsentry))
       })
       .catch((err) => {
+        logger.info(err)
         return res.status(500).json({
           errors: [
             {
