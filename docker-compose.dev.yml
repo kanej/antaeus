@@ -10,7 +10,14 @@ services:
       - "80:3000"
     depends_on:
       - ipfs
+      - etcd
     environment:
       - NODE_ENV=production
   ipfs:
     image: jbenet/go-ipfs
+  etcd:
+    image: quay.io/coreos/etcd:v3.0.4
+    command: >
+      etcd
+      --listen-client-urls http://0.0.0.0:2379
+      --advertise-client-urls http://etcd:2379

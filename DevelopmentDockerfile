@@ -6,6 +6,14 @@ RUN mkdir /antaeus
 WORKDIR /antaeus
 VOLUME /antaeus
 
+RUN npm install -g nodemon
+
 EXPOSE 3000
 
-CMD node src/cli/bin.js start --port 3000 --dnsConfig localDnsConfig.json --ipfsHost ipfs --ipfsPort 5001
+CMD nodemon --watch src src/cli/bin.js start \
+    --port 3000 \
+    --dnsConfig localDnsConfig.json \
+    --ipfsHost ipfs \
+    --ipfsPort 5001 \
+    --enableEtcd \
+    --etcdUrl http://etcd:2379
