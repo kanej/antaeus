@@ -14,6 +14,8 @@ var DaemonChecker = function (options) {
   this.logger = _.isObject(options.logger) ? options.logger : { info: () => {} }
 
   this.ensureConnection = function (host, port) {
+    this.logger.info(`Attempting to connect to IPFS on host ${host} and port ${port}`)
+
     return new Promise((resolve, reject) => {
       return this._recursiveRequest(resolve, reject, this.retries, { host: host, port: port })
     })
