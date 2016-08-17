@@ -53,8 +53,24 @@ describe('Routes', () => {
           homeEndpoints.routeToIPFS(req, res)
         })
 
+        it('lookups up the ipfs node', () => {
+          expect(ipfs.send.getCall(0).args[1]).to.equal('QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u')
+        })
+
         it('returns the file', () => {
           expect(requestedFile.pipe.calledOnce).to.equal(true)
+        })
+      })
+
+      describe('looked up by a valid address with a query string', () => {
+        beforeEach(() => {
+          req.url += '?q=example'
+          ipfs.send.callsArgWith(4, null, requestedFile)
+          homeEndpoints.routeToIPFS(req, res)
+        })
+
+        it('looks up the ipfs node', () => {
+          expect(ipfs.send.getCall(0).args[1]).to.equal('QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u')
         })
       })
 
