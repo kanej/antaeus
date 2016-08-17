@@ -16,12 +16,15 @@ let ConfigLoader = function ConfigLoader (options) {
 
   this.fs = options.fs
 
+  this.logger = _.isObject(options.logger) ? options.logger : { info: () => {} }
+
   this.retrieve = function verify (configAddress) {
     if (!configAddress) {
       return new Promise((resolve, reject) => { resolve({}) })
     }
 
     if (configAddress.length !== 46) {
+      this.logger.info('Loading DNS config from file: ' + configAddress)
       return new Promise((resolve, reject) => {
         return this._getConfigFromFile(configAddress, (err, dnsConfig) => {
           if (err) {
@@ -33,6 +36,7 @@ let ConfigLoader = function ConfigLoader (options) {
       })
     }
 
+    this.logger.info('Loading DNS config from ipfs: ' + configAddress)
     return new Promise((resolve, reject) => {
       return this._getConfigFromIpfs(configAddress, (err, dnsConfig) => {
         if (err) {

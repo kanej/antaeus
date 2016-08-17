@@ -72,7 +72,7 @@ var Antaeus = function (options) {
       .then(() => {
         this.ipfs = ipfsAPI(ipfsHost, ipfsPort)
 
-        this.dnsConfigLoader = new ConfigLoader({ ipfs: this.ipfs, fs: fs })
+        this.dnsConfigLoader = new ConfigLoader({ ipfs: this.ipfs, fs: fs, logger: this.logger })
         return this.dnsConfigLoader.retrieve(this.config.dnsConfig)
       })
       .then((dnsConfig) => {

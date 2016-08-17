@@ -17,6 +17,12 @@ describe('Config Loader', () => {
     it('throws an error if there is no fs option provided', () => {
       expect(() => { return new ConfigLoader({ ipfs: {}, fs: null }) }).to.throw(Error)
     })
+
+    it('uses a logger if it is passed', () => {
+      const logger = { info: () => {} }
+      const configLoader = new ConfigLoader({ ipfs: {}, fs: {}, logger: logger })
+      expect(configLoader.logger).to.equal(logger)
+    })
   })
 
   describe('retrieve command', () => {
