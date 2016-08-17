@@ -5,7 +5,7 @@ ENV IPFS_HOST ipfs
 ENV IPFS_PORT 5001
 ENV ETCD_ENABLE true
 ENV ETCD_URL http://etcd:2379
-ENV DNS_CONFIG
+ENV DNS_CONFIG ''
 
 RUN mkdir /antaeus
 WORKDIR /antaeus
@@ -19,5 +19,5 @@ CMD antaeus start \
     --ipfsHost $IPFS_HOST \
     --ipfsPort $IPFS_PORT \
     --enableEtcd $ETCD_ENABLE \
-    --etcdUrl $ETCD_URL
+    --etcdUrl $ETCD_URL \
     --dnsConfig $DNS_CONFIG
