@@ -1,0 +1,33 @@
+version: '2'
+services:
+  web:
+    restart: always
+    image: kanej/antaeus:0.6.0
+    volumes:
+      - .:/antaeus
+    ports:
+      - "80:3000"
+    depends_on:
+      - ipfs
+    environment:
+      - NODE_ENV=production
+      - IPFS_HOST=ipfs
+      - IPFS_PORT=5001
+      - ETCD_ENABLE=true
+      - ETCD_URL=http://etcd:2379
+      - DNS_CONFIG=QmU4E8mvK2f1ZoePLtTqtmSrLcxq9SchJ84bohW5Y5o1gQ
+  ipfs:
+    restart: always
+    image: ipfs/go-ipfs:v0.4.3-rc3
+    ports:
+      - "4001:4001"
+    volumes:
+      - /srv/ipfs/data:/data/ipfs
+      - /srv/ipfs/staging:/export
+  etcd:
+    restart: always
+    image: quay.io/coreos/etcd:v3.0.4
+    command: >
+      etcd
+      --listen-client-urls http://0.0.0.0:2379
+      --advertise-client-urls http://etcd:2379
