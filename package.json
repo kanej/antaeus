@@ -9,7 +9,8 @@
     "npm test"
   ],
   "bin": {
-    "antaeus": "src/cli/bin.js"
+    "antaeus": "src/cli/bin.js",
+    "antaeusctl": "src/cli/client.js"
   },
   "scripts": {
     "lint": "aegir-lint",
@@ -46,6 +47,7 @@
     "body-parser": "1.15.2",
     "express": "^4.13.4",
     "ipfs-api": "6.0.3",
+    "is-ipfs": "0.2.1",
     "jsonapi-serializer": "3.3.0",
     "jsonwebtoken": "7.1.6",
     "lodash": "^4.13.1",

@@ -117,7 +117,11 @@ class ApiClient {
         return reject(body.errors[0].title)
       }
 
-      return resolve(body.data)
+      if (body) {
+        return resolve(body.data)
+      } else {
+        return resolve()
+      }
     }
   }
 }
