@@ -10,8 +10,8 @@ class ApiClient {
       throw new Error('Antaeus API Client requires an options object on construction')
     }
 
-    if (!_.isString(options.url)) {
-      throw new Error('Antaeus API client my be passed a "url" option for the remote api server')
+    if (!_.isString(options.serverUrl)) {
+      throw new Error('Antaeus API client my be passed a "serverUrl" option for the remote api server')
     }
 
     if (!_.isString(options.username)) {
@@ -22,7 +22,7 @@ class ApiClient {
       throw new Error('Antaeus API client my be passed a "password" option for the remote api server')
     }
 
-    this.serverUrl = options.url
+    this.serverUrl = options.serverUrl
 
     this.accessToken = null
     this.authenticationPromise = null
