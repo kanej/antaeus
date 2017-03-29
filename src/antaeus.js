@@ -116,6 +116,7 @@ var Antaeus = function (options) {
         apiEndpoints.setup(this.app)
 
         this.app.get(/^\/ipfs.*/, homeEndpoints.routeToIPFS)
+        this.app.get(/^\/ipns.*/, homeEndpoints.routeToIPFS)
       })
   }
 }
