@@ -43,7 +43,9 @@ describe('Routes', () => {
 
       res.status = sinon.stub()
       res.send = sinon.spy()
+      res.contentType = sinon.stub()
       res.status.returnsThis()
+      res.contentType.returnsThis()
     })
 
     describe('an individual file', () => {
@@ -76,16 +78,16 @@ describe('Routes', () => {
 
       describe('looked up by an invalid address', () => {
         beforeEach(() => {
-          ipfs.send.callsArgWith(4, 'Not a valid address', null)
+          ipfs.send.callsArgWith(4, { code: 0, message: 'Not a valid address' }, null)
           homeEndpoints.routeToIPFS(req, res)
         })
 
-        it('returns a 500 http status code', () => {
-          expect(res.status.calledWith(500)).to.equal(true)
+        it('returns a 404 http status code', () => {
+          expect(res.status.calledWith(404)).to.equal(true)
         })
 
         it('returns the error message', () => {
-          expect(res.send.calledWith('Not a valid address')).to.equal(true)
+          expect(res.send.calledWith('Path Resolve error: Not a valid address')).to.equal(true)
         })
       })
     })

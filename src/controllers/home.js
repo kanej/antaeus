@@ -24,6 +24,12 @@ const routeToIPFS = (req, res) => {
           return recursiveFile.pipe(res)
         })
       } else {
+        if (err.code === 0) {
+          return res.status(404)
+            .contentType('text/plain; charset=utf-8')
+            .send(`Path Resolve error: ${err.message}`)
+        }
+
         logger.error(err.message, { path: ipfsPath })
         return res.status(500).send(err)
       }
