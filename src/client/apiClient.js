@@ -114,7 +114,7 @@ class ApiClient {
       }
 
       if (Math.floor(response.statusCode / 100) !== 2) {
-        return reject(body.errors[0].title)
+        return reject(JSON.stringify(response, null, 2))
       }
 
       if (body) {

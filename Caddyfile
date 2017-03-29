@@ -1,4 +1,9 @@
 0.0.0.0
 log stdout
 errors stdout
-proxy / web:3000
+proxy / web:3000 {
+      transparent
+}
+mime {
+     .css text/css
+}
