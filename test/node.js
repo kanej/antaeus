@@ -51,12 +51,12 @@ describe('Routes', () => {
     describe('an individual file', () => {
       describe('looked up by a valid address', () => {
         beforeEach(() => {
-          ipfs.send.callsArgWith(4, null, requestedFile)
+          ipfs.send.callsArgWith(1, null, requestedFile)
           homeEndpoints.routeToIPFS(req, res)
         })
 
         it('lookups up the ipfs node', () => {
-          expect(ipfs.send.getCall(0).args[1]).to.equal('QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u')
+          expect(ipfs.send.getCall(0).args[0].args).to.equal('QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u')
         })
 
         it('returns the file', () => {
@@ -67,18 +67,18 @@ describe('Routes', () => {
       describe('looked up by a valid address with a query string', () => {
         beforeEach(() => {
           req.url += '?q=example'
-          ipfs.send.callsArgWith(4, null, requestedFile)
+          ipfs.send.callsArgWith(1, null, requestedFile)
           homeEndpoints.routeToIPFS(req, res)
         })
 
         it('looks up the ipfs node', () => {
-          expect(ipfs.send.getCall(0).args[1]).to.equal('QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u')
+          expect(ipfs.send.getCall(0).args[0].args).to.equal('QmWATWQ7fVPP2EFGu71UkfnqhYXDYH566qy47CnJDgvs8u')
         })
       })
 
       describe('looked up by an invalid address', () => {
         beforeEach(() => {
-          ipfs.send.callsArgWith(4, { code: 0, message: 'Not a valid address' }, null)
+          ipfs.send.callsArgWith(1, { code: 0, message: 'Not a valid address' }, null)
           homeEndpoints.routeToIPFS(req, res)
         })
 
@@ -95,12 +95,12 @@ describe('Routes', () => {
     describe('a directory', () => {
       describe('looked up by a valid address', () => {
         beforeEach(() => {
-          ipfs.send.onFirstCall().callsArgWith(4, { message: 'this dag node is a directory' }, null)
+          ipfs.send.onFirstCall().callsArgWith(1, { message: 'this dag node is a directory' }, null)
         })
 
         describe('with an index.html file', () => {
           beforeEach(() => {
-            ipfs.send.onSecondCall().callsArgWith(4, null, requestedIndexFile)
+            ipfs.send.onSecondCall().callsArgWith(1, null, requestedIndexFile)
             homeEndpoints.routeToIPFS(req, res)
           })
 
@@ -111,7 +111,7 @@ describe('Routes', () => {
 
         describe('without an index.html file', () => {
           beforeEach(() => {
-            ipfs.send.onSecondCall().callsArgWith(4, 'Not a valid address', null)
+            ipfs.send.onSecondCall().callsArgWith(1, 'Not a valid address', null)
             homeEndpoints.routeToIPFS(req, res)
           })
 

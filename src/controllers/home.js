@@ -12,10 +12,18 @@ const routeToIPFS = (req, res) => {
 
   const ipfsPath = url.parse(req.url).pathname.replace('/ipfs/', '')
 
-  return ipfs.send('cat', ipfsPath, null, null, (err, ipfsFile) => {
+  return ipfs.send({
+    path: 'cat',
+    args: ipfsPath,
+    buffer: null
+  }, (err, ipfsFile) => {
     if (err) {
       if (err.message === 'this dag node is a directory') {
-        return ipfs.send('cat', ipfsPath + '/index.html', null, null, (err, recursiveFile) => {
+        return ipfs.send({
+          path: 'cat',
+          args: ipfsPath + '/index.html',
+          buffer: null
+        }, (err, recursiveFile) => {
           if (err) {
             logger.error(err)
             return res.status(500).send(err)
