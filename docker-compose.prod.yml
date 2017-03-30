@@ -11,7 +11,7 @@ services:
       - web
   web:
     restart: always
-    image: kanej/antaeus:0.7.2
+    image: kanej/antaeus:0.8.0
     volumes:
       - .:/antaeus
     depends_on:
