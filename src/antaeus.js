@@ -91,6 +91,8 @@ var Antaeus = function (options) {
         this.dnsMapping = dnsMapping
 
         this.app = express()
+        this.app.set('views', './src/views')
+        this.app.set('view engine', 'pug')
 
         this.app.set('ipfs', this.ipfs)
         this.app.set('serializer', this.serializer)

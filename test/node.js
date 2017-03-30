@@ -12,12 +12,12 @@ describe('Routes', () => {
     let res = {}
 
     beforeEach(() => {
-      res.send = sinon.spy()
+      res.render = sinon.spy()
       homeEndpoints.antaeusWelcomeMessage(req, res)
     })
 
     it('show the welcome message', () => {
-      expect(res.send.calledWith('Welcome to Antaeus')).to.equal(true)
+      expect(res.render.calledWith('home', { title: 'Antaeus' })).to.equal(true)
     })
   })
 

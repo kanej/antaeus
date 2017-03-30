@@ -55,6 +55,7 @@
     "nconf": "0.8.4",
     "node-etcd": "5.0.3",
     "osenv": "0.1.4",
+    "pug": "2.0.0-beta11",
     "request": "2.81.0",
     "ronin": "^0.3.11",
     "winston": "2.3.1",

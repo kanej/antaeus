@@ -3,7 +3,7 @@
 const url = require('url')
 
 const antaeusWelcomeMessage = (req, res) => {
-  return res.send('Welcome to Antaeus')
+  return res.render('home', { title: 'Antaeus' })
 }
 
 const routeToIPFS = (req, res) => {

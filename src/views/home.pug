@@ -1,0 +1,37 @@
+html
+  head
+    title= title
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css")
+    script(src="https://code.jquery.com/jquery-3.2.1.min.js", integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=", crossorigin="anonymous")
+    script(src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js")
+    style(type="text/css").
+
+      .antaeus-page {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+      }
+
+      .main.container {
+        flex: 1;
+        margin-top: 7em;
+      }
+
+  body.antaeus-page
+    // div.ui.fixed.inverted.menu
+    //  div.ui.container
+    //    a.header.item(href="#") Antaeus
+    //    a.item(href="#") Home
+    div.ui.main.text.container
+      .ui.raised.segment
+        a.ui.red.ribbon.label Alpha
+        h1.ui.huge.center.aligned.header Antaeus IPFS Gateway
+        .ui.clearing.divider
+        p This is a gateway to the Inter Planetary File System.
+        p To add this Antaeus instance as a peer to your IPFS node run:
+        code.code.bash(data-type="bash", data-title="commands")
+          |> ipfs swarm connect /ip4/188.166.154.155/tcp/4001/ipfs/QmUj7rsrMYnaVwXXNV1dAMAHB8oNzm76bQPuRD5QQahWQ2
+    .ui.inverted.vertical.footer.segment
+      .ui.center.aligned.container
+        .ui.horizontal.inverted.small.divided.link.list
+          a.item(href="https://www.kanej.me") Built in Glasgow from tea
