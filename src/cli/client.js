@@ -105,4 +105,5 @@ if (process.argv.length === 2) {
   options.showHelp()
 }
 
+// eslint-disable-next-line no-unused-expressions
 options.argv

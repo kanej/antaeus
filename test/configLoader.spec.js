@@ -1,4 +1,5 @@
 /* eslint-env mocha */
+/* eslint-disable no-unused-expressions */
 'use strict'
 
 const expect = require('chai').expect
