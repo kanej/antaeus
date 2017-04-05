@@ -14,7 +14,11 @@ const config = {
   },
   logger: logger,
   enableEtcd: true,
-  etcdUrl: 'http://localhost:2379'
+  etcdUrl: 'http://localhost:2379',
+  jwtConfig: {
+    accessKey: 'user',
+    secretKey: 'example'
+  }
 }
 
 if (process.argv.length === 3) {

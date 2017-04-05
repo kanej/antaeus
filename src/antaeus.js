@@ -36,7 +36,11 @@ var Antaeus = function (options) {
       port: 5001
     },
     enableEtcd: false,
-    etcdUrl: 'http://localhost:2379'
+    etcdUrl: 'http://localhost:2379',
+    jwtConfig: {
+      accessKey: null,
+      secretKey: null
+    }
   }
 
   if (_.isPlainObject(options)) {
@@ -98,6 +102,7 @@ var Antaeus = function (options) {
         this.app.set('serializer', this.serializer)
         this.app.set('logger', this.logger)
         this.app.set('dnsMapping', this.dnsMapping)
+        this.app.set('jwtConfig', this.config.jwtConfig)
 
         this.app.use(bodyParser.urlencoded({ extended: false }))
         this.app.use(bodyParser.json())

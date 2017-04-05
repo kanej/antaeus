@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const apiSetup = function (app) {
   const ensureAuthToken = (req, res, next) => {
     const token = req.body.token || req.query.token || req.headers['x-access-token']
+    const jwtConfig = req.app.get('jwtConfig')
 
     if (!token) {
       return res.status(403).json({
@@ -18,7 +19,7 @@ const apiSetup = function (app) {
       })
     }
 
-    jwt.verify(token, 'super secret', (err, decoded) => {
+    jwt.verify(token, jwtConfig.secretKey, (err, decoded) => {
       if (err) {
         return res.json({
           errors: [
@@ -36,9 +37,35 @@ const apiSetup = function (app) {
   }
 
   app.post('/api/authenticate', (req, res) => {
-    const token = jwt.sign({ user: 'anon' }, 'super secret', { expiresIn: '1 day' })
+    const jwtConfig = req.app.get('jwtConfig')
+    const username = req.body.username
+    const password = req.body.password
 
-    res.json({ data: { token: token } })
+    if (username !== jwtConfig.accessKey) {
+      return res.json({
+        errors: [
+          {
+            title: 'Unknown access key',
+            detail: 'The access key ID you provided does not exist in our records'
+          }
+        ]
+      })
+    }
+
+    if (password !== jwtConfig.secretKey) {
+      return res.json({
+        errors: [
+          {
+            title: 'Authentication failed',
+            detail: 'Authentication failed, check your access credentials.'
+          }
+        ]
+      })
+    }
+
+    const token = jwt.sign({ user: 'anon' }, jwtConfig.secretKey, { expiresIn: '1 day' })
+
+    return res.json({ data: { token: token } })
   })
 
   app.get('/api/dns', [ensureAuthToken], (req, res) => {

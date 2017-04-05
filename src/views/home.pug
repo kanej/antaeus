@@ -35,3 +35,19 @@ html
       .ui.center.aligned.container
         .ui.horizontal.inverted.small.divided.link.list
           a.item(href="https://www.kanej.me") Built in Glasgow from tea
+
+    script(type="text/javascript").
+      $(function() {
+        $.ajax({
+          type: 'POST',
+          url: 'api/authenticate',
+          data: {
+            username: 'usera',
+            password: 'example'
+          }
+        }).then(function(result) {
+          console.log(result);
+        }).catch(function(err) {
+          console.error(err);
+        });
+      })
