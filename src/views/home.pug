@@ -30,7 +30,8 @@ html
         p This is a gateway to the Inter Planetary File System.
         p To add this Antaeus instance as a peer to your IPFS node run:
         code.code.bash(data-type="bash", data-title="commands")
-          |> ipfs swarm connect /ip4/188.166.154.155/tcp/4001/ipfs/QmUj7rsrMYnaVwXXNV1dAMAHB8oNzm76bQPuRD5QQahWQ2
+          each address in addresses
+            p ipfs swarm connect #{address}
     .ui.inverted.vertical.footer.segment
       .ui.center.aligned.container
         .ui.horizontal.inverted.small.divided.link.list
@@ -42,7 +43,7 @@ html
           type: 'POST',
           url: 'api/authenticate',
           data: {
-            username: 'usera',
+            username: 'user',
             password: 'example'
           }
         }).then(function(result) {

@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const ipfsAPI = require('ipfs-api')
 const morgan = require('morgan')
 const Etcd = require('node-etcd')
+const Promise = require('bluebird')
 
 const homeEndpoints = require('./controllers/home')
 const apiEndpoints = require('./controllers/api')
@@ -76,6 +77,10 @@ var Antaeus = function (options) {
       .then(() => {
         this.ipfs = ipfsAPI(ipfsHost, ipfsPort)
 
+        return Promise.promisify(this.ipfs.id, { context: this.ipfs })()
+      })
+      .then((ipfsId) => {
+        this.ipfsId = ipfsId
         this.dnsConfigLoader = new ConfigLoader({ ipfs: this.ipfs, fs: fs, logger: this.logger })
         return this.dnsConfigLoader.retrieve(this.config.dnsConfig)
       })
@@ -99,6 +104,7 @@ var Antaeus = function (options) {
         this.app.set('view engine', 'pug')
 
         this.app.set('ipfs', this.ipfs)
+        this.app.set('ipfsId', this.ipfsId)
         this.app.set('serializer', this.serializer)
         this.app.set('logger', this.logger)
         this.app.set('dnsMapping', this.dnsMapping)

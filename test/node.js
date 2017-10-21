@@ -8,16 +8,33 @@ describe('Routes', () => {
   const homeEndpoints = require('../src/controllers/home')
 
   describe('GET /', () => {
-    let req = {}
+    let req = {
+      app: {
+        get: function () {
+          return {
+            addresses: [
+              '/ip4/127.0.0.1/tcp/4001/ipfs/QmVaUD4sack94cZCWEcQsVVTH3MfBaSKGoX368VREwVEgP',
+              '/ip4/192.168.1.251/tcp/4001/ipfs/QmVaUD4sack94cZCWEcQsVVTH3MfBaSKGoX368VREwVEgP',
+              '/ip6/::1/tcp/4001/ipfs/QmVaUD4sack94cZCWEcQsVVTH3MfBaSKGoX368VREwVEgP',
+              '/ip4/86.139.131.174/tcp/38316/ipfs/QmVaUD4sack94cZCWEcQsVVTH3MfBaSKGoX368VREwVEgP'
+            ]
+          }
+        }
+      }
+    }
     let res = {}
+    let expectedHomeDetails = {
+      title: 'Antaeus',
+      addresses: ['/ip4/192.168.1.251/tcp/4001/ipfs/QmVaUD4sack94cZCWEcQsVVTH3MfBaSKGoX368VREwVEgP']
+    }
 
     beforeEach(() => {
       res.render = sinon.spy()
       homeEndpoints.antaeusWelcomeMessage(req, res)
     })
 
-    it('show the welcome message', () => {
-      expect(res.render.calledWith('home', { title: 'Antaeus' })).to.equal(true)
+    it('show the welcome message and swarm connect address', () => {
+      expect(res.render.calledWith('home', expectedHomeDetails)).to.equal(true)
     })
   })
 
@@ -123,6 +140,21 @@ describe('Routes', () => {
             expect(res.send.calledWith('Not a valid address')).to.equal(true)
           })
         })
+      })
+    })
+
+    describe('on an erroring ipfs node', () => {
+      beforeEach(() => {
+        ipfs.send.callsArgWith(1, { code: 321, message: 'Internal error' }, null)
+        homeEndpoints.routeToIPFS(req, res)
+      })
+
+      it('returns a 500 http status code', () => {
+        expect(res.status.calledWith(500)).to.equal(true)
+      })
+
+      it('returns the error message', () => {
+        expect(res.send.calledWith('Internal error')).to.equal(true)
       })
     })
   })

@@ -1,9 +1,21 @@
 'use strict'
 
+const _ = require('lodash')
 const url = require('url')
 
 const antaeusWelcomeMessage = (req, res) => {
-  return res.render('home', { title: 'Antaeus' })
+  const ipfsId = req.app.get('ipfsId')
+
+  const addresses = _.chain(ipfsId.addresses)
+    .reject(item => /\/ip6\//.test(item))
+    .reject(item => /\/127.0.0.1\//.test(item))
+    .filter(item => /\/tcp\/4001\//.test(item))
+    .value()
+
+  return res.render('home', {
+    title: 'Antaeus',
+    addresses: addresses
+  })
 }
 
 const routeToIPFS = (req, res) => {
@@ -39,7 +51,7 @@ const routeToIPFS = (req, res) => {
         }
 
         logger.error(err.message, { path: ipfsPath })
-        return res.status(500).send(err)
+        return res.status(500).send(err.message)
       }
     }
 
